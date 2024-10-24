@@ -187,6 +187,5 @@ int main(int argc, char *argv[])
 
   // m.print();
   m.init_adj();
-  m.display_g();
 	m.dijkstras(start, end);
 }
