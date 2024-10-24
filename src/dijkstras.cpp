@@ -107,24 +107,24 @@ void Map::display_g()
 void Map::dijkstras(pair<int, int> start_coords, pair<int, int> end_coords) {
 	int start = start_coords.first*c + start_coords.second;
 	int end = end_coords.first*c + end_coords.second;
-
+  int grid_size = r * c;
   // Score all current paths to take
   std::priority_queue<pair<int, int>, vector<pair<int, int>>, std::greater<pair<int, int>>> pq;
   // Stores all the distances from strt node
-	vector<int> dists(r * c);
+	vector<int> dists(grid_size);
 	for (size_t i = 0; i < dists.size(); i++) {
 		dists[i] = INT_MAX;
 	}
 	dists[start] = 0;
 	// Stores adj edges associated with the shortest distance from strt node
-	vector<int> ideal_edges(r * c);
+	vector<int> ideal_edges(grid_size);
 	for (size_t i = 0; i < ideal_edges.size(); i++) {
 		ideal_edges[i] = -1;
 	}
   // Paths taken to get to trgt
   std::map<int, int> paths;
   // initialize distances as infinity and strt as 0
-  for (int i = 0; i < r * c; i++) {
+  for (int i = 0; i < grid_size; i++) {
 		pq.push({dists[i], i});
 	}
  
