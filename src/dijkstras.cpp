@@ -9,7 +9,6 @@
 #include <utility>
 #include <queue>
 #include <climits>
-#include <memory>
 
 using std::cin;
 using std::pair;
@@ -31,14 +30,14 @@ struct Map
   unordered_map<char, int> tile_weights;
   unordered_map<int, vector<Edge>> adj_list;
 
-  void create_g();
+  void init_adj();
   void print();
   void display_g();
   void dijkstras(pair<int, int> strt, pair<int, int> trgt);
 };
 
 // Adds adjacent nodes of current to adj_list
-void Map::create_g()
+void Map::init_adj()
 {
   for (size_t i = 0; i < map.size(); i++)
   {
@@ -99,27 +98,29 @@ void Map::display_g()
 
 
 // Dijkstra's
-void Map::dijkstras(pair<int, int> strt, pair<int, int> trgt)
-{
+void Map::dijkstras(pair<int, int> start_coords, pair<int, int> end_coords) {
   int cost;
+	int start = start_coords.first*c + start_coords.second;
+	int end = end_coords.first*c + end_coords.second;
+
   // Score all current paths to take
   std::priority_queue<pair<int, int>, vector<pair<int, int>>, std::greater<pair<int, int>>> pq;
   // Stores all the distances from strt node
-  unordered_map<int, int> dists;
+	vector<int> dists(r * c, INT_MAX);
+	dists[start] = 0;
+	// Stores adj edges associated with the shortest distance from strt node
+	vector<int> ideal_edges(r * c, -1);
   // Visited;
   vector<int> visited(r * c, 0);
   // Paths taken to get to trgt
   std::map<int, int> paths;
   // initialize distances as infinity and strt as 0
-	auto start = strt.first*c + strt.second;
   for (int i = 0; i < r * c; i++) {
-		int priority = i == start ? 0 : INT_MAX;
-    dists[i] = priority;
-		pq.push({priority, i});
+		pq.push({dists[i], i});
 	}
  
 	// Process until the shortest known path is to the target node
-  while(pq.top().second != start) {
+  while (pq.top().second != end) {
 		// Pop node w/ shortest path
     pair<int,int> cur = pq.top();
     pq.pop();
@@ -129,11 +130,15 @@ void Map::dijkstras(pair<int, int> strt, pair<int, int> trgt)
       continue;
       
     auto neighbors = adj_list[cur.second];
-    for (auto it = neighbors.begin(); it != neighbors.end(); it++) {
-			auto adj = *it;
-    }
+		for (auto edge : adj_list[cur.second]) {
+			int distance = cur.first + edge.weight;
+			if (distance < dists[cur.second]) {
+				dists[edge.to] = distance;
+				ideal_edges[edge.to] = edge.from;
+				pq.push({distance, cur.second});
+			}
+		}
   }
-
 }
 
 // MAIN EXECUTION
@@ -163,6 +168,6 @@ int main(int argc, char *argv[])
   cin >> start.first >> start.second >> end.first >> end.second;
 
   // m.print();
-  m.create_g();
+  m.init_adj();
   // m.display_g();
 }
