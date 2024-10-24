@@ -18,7 +18,7 @@ Distance Array: Tracks the shortest known distance to each node. O(n)
 
 Ideal Edges Array: Records the shortest path’s predecessors for path reconstruction.
 
-3 - Our implementation does not scale well. It uses a bunch of memory. I feel like the jump from 7MB to 173MB from size 200 to size 1000 is kinda crazy. The time also is 20x slower. 
+3 - Our implementation does not scale well. It uses a bunch of memory. I feel like the jump from 7MB to 173MB from size 200 to size 1000 is kinda crazy. The time also is 20x slower. If we had a queue with decrease_key operation, we could cut down on memory usage.
 
 | N             | Elapsed Time  | Memory Usage   |
 |---------------|---------------|----------------|
