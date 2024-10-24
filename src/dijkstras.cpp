@@ -129,7 +129,6 @@ void Map::dijkstras(pair<int, int> start_coords, pair<int, int> end_coords) {
   while (!pq.empty()) {
 		//first  Pop node w/ shortest path
     pair<int,int> cur = pq.top();
-		//std::cout << cur.first << '\n';
     pq.pop();
 
 		// Don't proceed if we know a better path to this node
@@ -149,12 +148,14 @@ void Map::dijkstras(pair<int, int> start_coords, pair<int, int> end_coords) {
 	// Print total cost
 	std::cout << dists[end] << '\n';
 	// Construct the shortest route by backtracking
-	vector<Edge> path;
+	vector<std::pair<int, int>> path;
 	for (auto dst = end; dst != -1; dst = ideal_edges[dst]) {
-		path.push_back(Edge{.from = ideal_edges[dst], .to = dst});
+		int row = dst / c;
+		int col = dst % c;
+		path.push_back({row, col});
 	}
 	for (auto it = path.rbegin(); it != path.rend(); it++) {
-		std::cout << it->from << ' ' << it->to << '\n';
+		std::cout << it->first << ' ' << it->second << '\n';
 	}
 }
 
