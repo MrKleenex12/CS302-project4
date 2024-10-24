@@ -48,14 +48,14 @@ void Map::init_adj()
 			int dst = (row - 1)*c + col;
       adj_list[i].push_back(Edge{
 					.from = (int)i, .to = dst,
-					.weight = tile_weights[map[dst]]});
+					.weight = tile_weights[map[i]]});
 		}
     // down
     if (row < r - 1) {
 			int dst = (row + 1) * c + col;
 			adj_list[i].push_back(Edge{
 					.from = (int)i, .to = dst,
-					.weight = tile_weights[map[dst]]
+					.weight = tile_weights[map[i]]
 					});
 		}
     // left
@@ -63,7 +63,7 @@ void Map::init_adj()
 			int dst = (row * c) + col - 1;
 			adj_list[i].push_back(Edge{
 					.from = (int)i, .to = dst,
-					.weight = tile_weights[map[dst]]
+					.weight = tile_weights[map[i]]
 					});
 		}
     // right
@@ -71,7 +71,7 @@ void Map::init_adj()
 			int dst = (row * c) + col + 1;
 			adj_list[i].push_back(Edge{
 					.from = (int)i, .to = dst,
-					.weight = tile_weights[map[dst]]
+					.weight = tile_weights[map[i]]
 					});
 		}
   }
