@@ -1,5 +1,8 @@
 // dijsktras.cpp
-// Larry Wang - Proj4
+// Larry Wang and Keith Scroggs - Proj4
+
+// With a given graph with weights, find the shortest path to a target from a start
+// using dijkstras algorithm
 
 #include <cassert>
 #include <iostream>
