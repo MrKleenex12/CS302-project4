@@ -1,30 +1,27 @@
-Project 04: Path Finding
-========================
+*Writeup
 
-This project implements a [Dijkstra's Algorithm] to perform rudimentary path
-finding on a 2D tile-based map.
+Larry worked on the parsing and set up the adj_lists and functions of the Map struct
 
-[Dijkstra's Algorithm]: https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+Keith worked on dijkstras and printing out the correct paths and total cost
 
+1 - We used an adjacency list to store the map. The neighbors of a node would be the tiles up,
+down, left, and right of it
 
-Input
------
+2 -  O((V+E)log V).
+Adjacency List: represents graph connections and weights. O(n)
+Priority Queue: Manages nodes based on their shortest known distances using a min-heap. O(logv)
+Distance Array: Tracks the shortest known distance to each node. O(n)
+Ideal Edges Array: Records the shortest path’s predecessors for path reconstruction.
 
-    TILES_N
-    TILE_NAME_0	TILE_COST_0
-    ...
-    TILE_NAME_N-1	TILE_COST_N-1
+3 - 
 
-    MAP_ROWS MAP_COLUMNS
-    TILE_0_0    ...
-    ...
-
-    TRAVELER_START_ROW TRAVELER_START_COL
-    TRAVELER_END_ROW   TRAVELER_END_COL
-
-Output
-------
-
-    Cost
-    [(ROW_0, COL_0), ...]
-
+| N             | Elapsed Time  | Memory Usage   |
+|---------------|---------------|----------------|
+| 10            | ...           | ...            |
+| 20            | ...           | ...            |
+| 50            | ...           | ...            |
+| 100           | ...           | ...            |
+| 200           | ...           | ...            |
+| 500           | ...           | ...            |
+| 1000          | ...           | ...            |
+|---------------|---------------|----------------|
