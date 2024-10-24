@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <utility>
 #include <queue>
+#include <climits>
 
 using std::cin;
 using std::pair;
@@ -19,7 +20,7 @@ struct Map
   int r, c;
   vector<char> map;
   unordered_map<int, int> titles;
-  unordered_map<int, std::unordered_set<int>> adj_list;
+  unordered_map<int, std::unordered_set<int>> adj_list; // FIXME
 
   void create_g();
   void print();
@@ -85,24 +86,26 @@ void Map::dijkstras(pair<int, int> strt, pair<int, int> trgt)
   // Paths taken to get to trgt
   std::map<int, int> paths;
   // initialize distances as infinity and strt as 0
-  for (int i = 0; i < r * c; i++)
-    dists[i] = INT_MAX;
-
-  // Push starting node with dist 0
-  pq.push({0, strt.first*c + strt.second});
-
-  // While loop
-  while(!pq.empty()) {
-    // <distance, node>
+	auto start = strt.first*c + strt.second;
+  for (int i = 0; i < r * c; i++) {
+		int priority = i == start ? 0 : INT_MAX;
+    dists[i] = priority;
+		pq.push({priority, i});
+	}
+ 
+	// Process until the shortest known path is to the target node
+  while(pq.top().second != start) {
+		// Pop node w/ shortest path
     pair<int,int> cur = pq.top();
     pq.pop();
 
+		// Don't proceed if we know a better path to this node
     if(cur.first > dists[cur.second])
       continue;
       
     auto neighbors = adj_list[cur.second];
-    for(auto i = neighbors.begin(); i != neighbors.end(); i++) {
-
+    for (auto it = neighbors.begin(); it != neighbors.end(); it++) {
+			auto adj = *it;
     }
   }
 
