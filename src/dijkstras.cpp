@@ -9,18 +9,27 @@
 #include <utility>
 #include <queue>
 #include <climits>
+#include <memory>
 
 using std::cin;
 using std::pair;
 using std::unordered_map;
 using std::vector;
+using std::unique_ptr;
+
+// A weight graph edge
+// ref: my challenge06 implementation - KS
+struct Edge {
+	size_t from, to; // Vertice index the edge connects to
+	int weight; // Weight of the edge
+};
 
 struct Map
 {
   int r, c;
   vector<char> map;
-  unordered_map<int, int> titles;
-  unordered_map<int, std::unordered_set<int>> adj_list; // FIXME
+  unordered_map<char, int> tile_weights;
+  unordered_map<int, vector<Edge>> adj_list;
 
   void create_g();
   void print();
@@ -33,20 +42,36 @@ void Map::create_g()
 {
   for (size_t i = 0; i < map.size(); i++)
   {
-    int i_col = i % c;
-    int i_row = i / c;
+    size_t col = i % c;
+    size_t i_row = i / c;
     // up
-    if (i_row > 0)
-      adj_list[i].insert((i_row - 1) * c + i_col);
+    if (i_row > 0) {
+			size_t dst = ((i_row - 1) * c) + col;
+      adj_list[i].push_back(Edge{
+					.from = i, .to = ((i_row - 1) * c + col),
+					.weight = tile_weights[i]});
+		}
     // down
-    if (i_row < r - 1)
-      adj_list[i].insert((i_row + 1) * c + i_col);
+    if (i_row < r - 1) {
+			adj_list[i].push_back(Edge{
+					.from = i, .to = (i_row + 1) * c + col,
+					.weight = tile_weights[i]
+					});
+		}
     // left
-    if (i_col > 0)
-      adj_list[i].insert((i_row * c) + i_col - 1);
+    if (col > 0) {
+			adj_list[i].push_back(Edge{
+					.from = i, .to = (i_row * c) + col - 1,
+					.weight = tile_weights[i]
+					});
+		}
     // right
-    if (i_col < c - 1)
-      adj_list[i].insert((i_row * c) + i_col + 1);
+    if (col < c - 1) {
+			adj_list[i].push_back(Edge{
+					.from = i, .to = (i_row * c) + col + 1,
+					.weight = tile_weights[i]
+					});
+		}
   }
 }
 
@@ -67,7 +92,7 @@ void Map::display_g()
   {
     printf("%zu: ", i);
     for (auto j = adj_list[i].begin(); j != adj_list[i].end(); j++)
-      printf("%i ", *j);
+      printf("%zu ", j->to);
     printf("\n");
   }
 }
@@ -115,13 +140,15 @@ void Map::dijkstras(pair<int, int> strt, pair<int, int> trgt)
 int main(int argc, char *argv[])
 {
   Map m;
-  int titles_n, weight;
-  char title_name;
-  cin >> titles_n;
-  for (int i = 0; i < titles_n; i++)
+  int n_tiles;
+  cin >> n_tiles;
+
+	char tile;
+	int weight;
+  for (int i = 0; i < n_tiles; i++)
   {
-    cin >> title_name >> weight;
-    m.titles[title_name] = weight;
+    cin >> tile >> weight;
+    m.tile_weights[tile] = weight;
   }
   cin >> m.r >> m.c;
   char temp;
