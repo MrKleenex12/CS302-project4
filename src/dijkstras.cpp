@@ -1,11 +1,12 @@
 // dijsktras.cpp
 // Larry Wang - Proj4
 
+#include <cassert>
 #include <iostream>
+#include <limits>
 #include <vector>
 #include <unordered_map>
 #include <map>
-#include <unordered_set>
 #include <utility>
 #include <queue>
 #include <climits>
@@ -14,12 +15,11 @@ using std::cin;
 using std::pair;
 using std::unordered_map;
 using std::vector;
-using std::unique_ptr;
 
 // A weight graph edge
 // ref: my challenge06 implementation - KS
 struct Edge {
-	size_t from, to; // Vertice index the edge connects to
+	int from, to; // Vertice index the edge connects to
 	int weight; // Weight of the edge
 };
 
@@ -41,34 +41,37 @@ void Map::init_adj()
 {
   for (size_t i = 0; i < map.size(); i++)
   {
-    size_t col = i % c;
-    size_t i_row = i / c;
+    int col = (int)i % c;
+    int row = (int)i / c;
     // up
-    if (i_row > 0) {
-			size_t dst = ((i_row - 1) * c) + col;
+    if (row > 0) {
+			int dst = (row - 1)*c + col;
       adj_list[i].push_back(Edge{
-					.from = i, .to = ((i_row - 1) * c + col),
-					.weight = tile_weights[i]});
+					.from = (int)i, .to = dst,
+					.weight = tile_weights[map[dst]]});
 		}
     // down
-    if (i_row < r - 1) {
+    if (row < r - 1) {
+			int dst = (row + 1) * c + col;
 			adj_list[i].push_back(Edge{
-					.from = i, .to = (i_row + 1) * c + col,
-					.weight = tile_weights[i]
+					.from = (int)i, .to = dst,
+					.weight = tile_weights[map[dst]]
 					});
 		}
     // left
     if (col > 0) {
+			int dst = (row * c) + col - 1;
 			adj_list[i].push_back(Edge{
-					.from = i, .to = (i_row * c) + col - 1,
-					.weight = tile_weights[i]
+					.from = (int)i, .to = dst,
+					.weight = tile_weights[map[dst]]
 					});
 		}
     // right
     if (col < c - 1) {
+			int dst = (row * c) + col + 1;
 			adj_list[i].push_back(Edge{
-					.from = i, .to = (i_row * c) + col + 1,
-					.weight = tile_weights[i]
+					.from = (int)i, .to = dst,
+					.weight = tile_weights[map[dst]]
 					});
 		}
   }
@@ -91,7 +94,7 @@ void Map::display_g()
   {
     printf("%zu: ", i);
     for (auto j = adj_list[i].begin(); j != adj_list[i].end(); j++)
-      printf("%zu ", j->to);
+      printf("%d ", j->weight);
     printf("\n");
   }
 }
@@ -99,19 +102,22 @@ void Map::display_g()
 
 // Dijkstra's
 void Map::dijkstras(pair<int, int> start_coords, pair<int, int> end_coords) {
-  int cost;
 	int start = start_coords.first*c + start_coords.second;
 	int end = end_coords.first*c + end_coords.second;
 
   // Score all current paths to take
   std::priority_queue<pair<int, int>, vector<pair<int, int>>, std::greater<pair<int, int>>> pq;
   // Stores all the distances from strt node
-	vector<int> dists(r * c, INT_MAX);
+	vector<int> dists(r * c);
+	for (size_t i = 0; i < dists.size(); i++) {
+		dists[i] = INT_MAX;
+	}
 	dists[start] = 0;
 	// Stores adj edges associated with the shortest distance from strt node
-	vector<int> ideal_edges(r * c, -1);
-  // Visited;
-  vector<int> visited(r * c, 0);
+	vector<int> ideal_edges(r * c);
+	for (size_t i = 0; i < ideal_edges.size(); i++) {
+		ideal_edges[i] = -1;
+	}
   // Paths taken to get to trgt
   std::map<int, int> paths;
   // initialize distances as infinity and strt as 0
@@ -120,25 +126,36 @@ void Map::dijkstras(pair<int, int> start_coords, pair<int, int> end_coords) {
 	}
  
 	// Process until the shortest known path is to the target node
-  while (pq.top().second != end) {
-		// Pop node w/ shortest path
+  while (!pq.empty()) {
+		//first  Pop node w/ shortest path
     pair<int,int> cur = pq.top();
+		//std::cout << cur.first << '\n';
     pq.pop();
 
 		// Don't proceed if we know a better path to this node
     if(cur.first > dists[cur.second])
       continue;
       
-    auto neighbors = adj_list[cur.second];
 		for (auto edge : adj_list[cur.second]) {
 			int distance = cur.first + edge.weight;
-			if (distance < dists[cur.second]) {
+			if (distance < dists[edge.to]) {
 				dists[edge.to] = distance;
-				ideal_edges[edge.to] = edge.from;
-				pq.push({distance, cur.second});
+				ideal_edges[edge.to] = cur.second;
+				pq.push({distance, edge.to});
 			}
 		}
   }
+
+	// Print total cost
+	std::cout << dists[end] << '\n';
+	// Construct the shortest route by backtracking
+	vector<Edge> path;
+	for (auto dst = end; dst != -1; dst = ideal_edges[dst]) {
+		path.push_back(Edge{.from = ideal_edges[dst], .to = dst});
+	}
+	for (auto it = path.rbegin(); it != path.rend(); it++) {
+		std::cout << it->from << ' ' << it->to << '\n';
+	}
 }
 
 // MAIN EXECUTION
@@ -169,5 +186,6 @@ int main(int argc, char *argv[])
 
   // m.print();
   m.init_adj();
-  // m.display_g();
+  m.display_g();
+	m.dijkstras(start, end);
 }
