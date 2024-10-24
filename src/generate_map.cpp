@@ -22,6 +22,7 @@ struct Grid {
 	int N;
 
 	TileSet tiles = TileSet();
+	vector<char> grid;
 
 	void generate();
 	void print_grid();
@@ -47,6 +48,38 @@ char TileSet::random_tile() {
 	return tiles[tile_distrib(*rand_gen.get())].first;
 }
 
+void Grid::generate() {
+	auto N2 = N * N;
+	grid.reserve(N2);
+	for (size_t i = 0; i < N2; i++) {
+		grid.push_back(tiles.random_tile());
+	}
+}
+void Grid::print_grid() {
+	std::cout << N << ' ' << N << '\n';
+	for (size_t r = 0; r < N; r++) {
+		for (size_t c = 0; c < N; c++) {
+			std::cout << grid[(r*N)+c];
+			if (c < N-1) {
+				std::cout << ' ';
+			}
+		}
+		std::cout << '\n';
+	}
+}
+void Grid::print_path() {
+	// Generate a random path
+	std::uniform_int_distribution<size_t> distrib(0, (N * N) - 1);
+	int start = distrib(*tiles.rand_gen.get());
+	int end = distrib(*tiles.rand_gen.get());
+#define ROW(n) n / N
+#define COL(n) n % N
+	std::cout << ROW(start) << ' ' << COL(start) << '\n';
+	std::cout << ROW(end) << ' ' << COL(end) << '\n';
+#undef COL
+#undef ROW
+}
+
 int main (int argc, char *argv[]) {
 	if (argc < 2) {
 		std::cerr << "usage: ./generate_map {N}\n";
@@ -56,4 +89,8 @@ int main (int argc, char *argv[]) {
 
 	// Print tileset
 	grid.tiles.print_tiles();
+	// Generate and print grid
+	grid.generate();
+	grid.print_grid();
+	grid.print_path();
 }
