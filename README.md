@@ -12,8 +12,11 @@ Keith worked on dijkstras(), created the edge struct, and printing out the corre
 
 2 -  O((V+E)log V).
 Adjacency List: represents graph connections and weights. O(n)
+
 Priority Queue: Manages nodes based on their shortest known distances using a min-heap. O(logn)
+
 Distance Array: Tracks the shortest known distance to each node. O(n)
+
 Ideal Edges Array: Records the shortest path’s predecessors for path reconstruction.
 
 3 -
