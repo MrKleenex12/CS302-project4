@@ -1,0 +1,18 @@
+==32371== Memcheck, a memory error detector
+==32371== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==32371== Using Valgrind-3.23.0 and LibVEX; rerun with -h for copyright info
+==32371== Command: ./src/dijkstras
+==32371== 
+==32371== 
+==32371== HEAP SUMMARY:
+==32371==     in use at exit: 0 bytes in 0 blocks
+==32371==   total heap usage: 4,000,078 allocs, 4,000,078 frees, 173,783,359 bytes allocated
+==32371== 
+==32371== All heap blocks were freed -- no leaks are possible
+==32371== 
+==32371== For lists of detected and suppressed errors, rerun with: -s
+==32371== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+real	1m38.763s
+user	1m37.711s
+sys	0m0.776s

@@ -1,0 +1,20 @@
+6
+f 3
+g 1
+G 2
+h 4
+m 7
+r 5
+10 10
+G G f h G f G f m m
+r f m m r G m h g g
+f h h r m m G m m f
+G G m g g g r G h h
+g r g G m m m m h h
+G h h h f g h G m r
+r g f h h m f g h m
+f m h m m r m m r G
+h m r g m G G G m h
+g G m r g G g m g m
+2 4
+1 0
