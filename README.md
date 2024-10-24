@@ -1,5 +1,25 @@
 # Proj4 Keith and Larry
 
+## Contributions
+
+Keith worked on dijkstras(), created the edge struct, and printing out the correct paths and total cost
+Larry worked on the reading in from stdin, creating the Map struct, and creating an adjacency list
+
+## Questions
+
+1 - We used an adjacency list to store the vertices and edges. The neighbors of a node would be the tiles up, down, left, and right of it.
+
+2 -  O((V+E)log V).
+Adjacency List: represents graph connections and weights. O(n)
+
+Priority Queue: Manages nodes based on their shortest known distances using a min-heap. O(logn)
+
+Distance Array: Tracks the shortest known distance to each node. O(n)
+
+Ideal Edges Array: Records the shortest path’s predecessors for path reconstruction.
+
+3 -
+
 | N             | Elapsed Time  | Memory Usage   |
 |---------------|---------------|----------------|
 | 10            | 1.17s         | 96,295         |
